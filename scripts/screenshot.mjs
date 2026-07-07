@@ -56,7 +56,7 @@ async function main() {
   try {
     const context = await browser.newContext({
       viewport: { width: 1920, height: 1080 },
-      deviceScaleFactor: 2, // 2x retina 清晰截图
+      deviceScaleFactor: 1, // 1x 控制文件大小
     });
     const page = await context.newPage();
 
