@@ -1,6 +1,6 @@
 <template>
   <div class="decoration">
-    <div class="decoration-line" v-for="n in 3" :key="n"></div>
+    <div v-for="n in 3" :key="n" class="decoration-line" />
   </div>
 </template>
 <style scoped lang="scss">

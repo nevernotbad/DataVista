@@ -1,4 +1,4 @@
-<template><div ref="chartRef" class="line-chart"></div></template>
+<template><div ref="chartRef" class="line-chart" /></template>
 <script setup lang="ts">
 import type { SalesData } from '@/types/dashboard';
 import { useLineChart } from './useLineChart';

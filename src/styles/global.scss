@@ -15,25 +15,107 @@ html, body {
   position: relative;
 }
 
+// ====== 自定义滚动条 ======
 ::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(var(--color-primary-rgb, 0,180,216), 0.2); border-radius: 2px; }
 
+// ====== 全局动画关键帧 ======
+
+// 面板入场
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeInUpStagger {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+// 面板网格入场
 .dashboard-grid > div {
-  animation: fadeInUp 0.5s ease-out both;
-  &:nth-child(1)  { animation-delay: 0.05s; }
-  &:nth-child(2)  { animation-delay: 0.1s; }
-  &:nth-child(3)  { animation-delay: 0.15s; }
-  &:nth-child(4)  { animation-delay: 0.2s; }
-  &:nth-child(5)  { animation-delay: 0.25s; }
-  &:nth-child(6)  { animation-delay: 0.3s; }
-  &:nth-child(7)  { animation-delay: 0.35s; }
-  &:nth-child(8)  { animation-delay: 0.4s; }
-  &:nth-child(9)  { animation-delay: 0.45s; }
-  &:nth-child(10) { animation-delay: 0.5s; }
+  animation: fadeInUpStagger 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) { animation-delay: #{$i * 0.06}s; }
+  }
+}
+
+// 脉冲呼吸动效
+@keyframes pulse-breath {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.85; }
+}
+
+// 状态点闪烁
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+// 数值高亮闪烁
+@keyframes value-flash {
+  0% { background: rgba(var(--color-primary-rgb, 0,180,216), 0.2); }
+  50% { background: rgba(var(--color-primary-rgb, 0,180,216), 0.05); }
+  100% { background: transparent; }
+}
+
+// 发光脉动
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+// 旋转 (刷新按钮)
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// 背景网格呼吸
+@keyframes grid-breath {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+// 光晕浮动
+@keyframes glow-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-20px); }
+}
+
+// ====== 全局 CSS 变量 ======
+:root {
+  --font-scale: 1;
+  --anim-duration-global: 1;
+  --user-zoom: 1;
+}
+
+// 动效禁用模式
+html[style*="--anim-duration-global: 0"] {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+
+// ====== 自定义鼠标 ======
+.dashboard-wrapper {
+  cursor: default;
+  * { cursor: default; }
+  a, button, [role="button"], input[type="range"] {
+    cursor: pointer;
+  }
+  input, textarea, [contenteditable] {
+    cursor: text;
+  }
+}
+
+// ====== 响应式断点 ======
+@media (max-width: 1024px) {
+  html { font-size: 11px; }
+}
+
+@media (min-width: 1600px) {
+  html { font-size: 16px; }
 }

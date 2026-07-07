@@ -2,7 +2,7 @@
   <div class="digital-scroll">
     <span class="digital-scroll-label">{{ label }}</span>
     <span class="digital-scroll-value">{{ displayValue }}</span>
-    <span class="digital-scroll-unit" v-if="unit">{{ unit }}</span>
+    <span v-if="unit" class="digital-scroll-unit">{{ unit }}</span>
   </div>
 </template>
 <script setup lang="ts">

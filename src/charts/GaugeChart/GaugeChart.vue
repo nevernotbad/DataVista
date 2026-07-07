@@ -1,4 +1,4 @@
-<template><div ref="chartRef" class="gauge-chart"></div></template>
+<template><div ref="chartRef" class="gauge-chart" /></template>
 <script setup lang="ts">
 import type { EfficiencyData } from '@/types/dashboard';
 import { useGaugeChart } from './useGaugeChart';

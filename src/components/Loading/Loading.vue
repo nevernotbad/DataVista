@@ -1,6 +1,6 @@
 <template>
-  <div class="loading-overlay" v-if="visible">
-    <div class="loading-ring"></div>
+  <div v-if="visible" class="loading-overlay">
+    <div class="loading-ring" />
     <p class="loading-text">数据加载中...</p>
   </div>
 </template>

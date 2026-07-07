@@ -1,4 +1,4 @@
-<template><div ref="chartRef" class="pie-chart"></div></template>
+<template><div ref="chartRef" class="pie-chart" /></template>
 <script setup lang="ts">
 import type { TrafficData } from '@/types/dashboard';
 import { usePieChart } from './usePieChart';

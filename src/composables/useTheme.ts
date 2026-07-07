@@ -20,7 +20,7 @@ function loadTheme(): ThemeId {
 let current: ThemeId = loadTheme();
 
 export function useThemeSwitch() {
-  function applyTheme(id: ThemeId) {
+  function applyThemeVars(id: ThemeId, customPrimary?: string | null, customAccent?: string | null) {
     const t = themes[id];
     const root = document.documentElement;
     root.setAttribute('data-theme', id);
@@ -31,12 +31,16 @@ export function useThemeSwitch() {
     setVar('--bg-dark', t.bgDark);
     setVar('--bg-mid', t.bgMid);
     setVar('--bg-light', t.bgLight);
-    setVar('--color-primary', t.colorPrimary);
-    setVar('--color-primary-rgb', hexToRgb(t.colorPrimary));
+
+    const primary = customPrimary || t.colorPrimary;
+    const accent = customAccent || t.colorAccent;
+
+    setVar('--color-primary', primary);
+    setVar('--color-primary-rgb', hexToRgb(primary));
     setVar('--color-secondary', t.colorSecondary);
     setVar('--color-tertiary', t.colorTertiary);
-    setVar('--color-accent', t.colorAccent);
-    setVar('--color-accent-rgb', hexToRgb(t.colorAccent));
+    setVar('--color-accent', accent);
+    setVar('--color-accent-rgb', hexToRgb(accent));
     setVar('--color-accent2', t.colorAccent2);
     setVar('--color-accent2-rgb', hexToRgb(t.colorAccent2));
     setVar('--glass-bg', t.glassBg);
@@ -54,11 +58,15 @@ export function useThemeSwitch() {
     try { localStorage.setItem(STORAGE_KEY, id); } catch { /* noop */ }
   }
 
-  function switchTo(id: ThemeId) { applyTheme(id); }
+  function switchTo(id: ThemeId, customPrimary?: string | null, customAccent?: string | null) {
+    applyThemeVars(id, customPrimary, customAccent);
+  }
+
   function getCurrent() { return current; }
   function getCurrentTheme() { return themes[current]; }
 
-  applyTheme(current);
+  // 初始化
+  applyThemeVars(current);
 
   return { switchTo, getCurrent, getCurrentTheme };
 }

@@ -1,4 +1,4 @@
-﻿/** 月度销售额 */
+/** 月度销售额 */
 export interface SalesData { month: string; revenue: number; target: number; }
 
 /** 流量渠道 */
@@ -16,8 +16,19 @@ export interface DeviceData { type: string; value: number; }
 /** 区域排行 */
 export interface RegionData { region: string; visits: number; percentage: string; }
 
-/** 同比环比 */
-export interface YoYData { label: string; current: number; last: number; change: number; }
+/** 同比环比 — 增强版 */
+export interface YoYData {
+  label: string;
+  current: number;
+  last: number;
+  change: number;
+  /** 环比变化率 */
+  mom?: number;
+  /** 目标完成率 */
+  completion?: number;
+  /** 趋势方向 */
+  trend?: 'up' | 'down' | 'flat';
+}
 
 /** 告警 */
 export interface AlertData { id: number; level: 'warning' | 'danger' | 'info'; message: string; time: string; }
@@ -32,4 +43,8 @@ export interface DashboardData {
   regions: RegionData[];
   yoy: YoYData[];
   alerts: AlertData[];
+  /** 最后更新时间 */
+  lastUpdated?: string;
+  /** 数据新鲜度 0-100 */
+  freshness?: number;
 }

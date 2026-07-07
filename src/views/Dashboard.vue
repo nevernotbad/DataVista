@@ -1,12 +1,12 @@
 ﻿<template>
   <div class="dashboard-page">
-    <Loading :visible="loading" />
-    <div v-if="error" class="error-state">
+    <Loading :visible="initialLoading" />
+    <div v-if="!initialLoading && error" class="error-state">
       <p class="error-title">数据加载失败</p>
       <p class="error-msg">{{ error }}</p>
       <button class="error-btn" @click="retry">重新加载</button>
     </div>
-    <DashboardLayout v-if="!loading && !error" />
+    <DashboardLayout v-if="!initialLoading" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import Loading from '@/components/Loading/Loading.vue';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 const store = useDashboardStore();
-const { loading, error } = storeToRefs(store);
+const { initialLoading, error } = storeToRefs(store);
 function retry() { store.fetchDashboard(); }
 onMounted(() => store.fetchDashboard());
 </script>
