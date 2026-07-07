@@ -1,0 +1,32 @@
+[
+  {
+    "channel": "直接访问",
+    "value": 35,
+    "percentage": "35%"
+  },
+  {
+    "channel": "搜索引擎",
+    "value": 28,
+    "percentage": "28%"
+  },
+  {
+    "channel": "社交媒体",
+    "value": 18,
+    "percentage": "18%"
+  },
+  {
+    "channel": "邮件营销",
+    "value": 10,
+    "percentage": "10%"
+  },
+  {
+    "channel": "广告投放",
+    "value": 6,
+    "percentage": "6%"
+  },
+  {
+    "channel": "其他",
+    "value": 3,
+    "percentage": "3%"
+  }
+]

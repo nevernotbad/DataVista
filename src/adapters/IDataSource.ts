@@ -1,0 +1,1 @@
+export interface IDataSource<T> { fetchData(): Promise<T>; }
