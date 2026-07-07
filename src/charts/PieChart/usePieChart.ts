@@ -1,40 +1,40 @@
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+﻿import { ref, onMounted, onUnmounted, watch } from 'vue';
 import * as echarts from 'echarts';
-import type { TrafficData } from '@/types/dashboard';
+import type { TrafficData, DeviceData } from '@/types/dashboard';
 
-export function usePieChart(data: () => TrafficData[]) {
+export function usePieChart(data: () => TrafficData[] | DeviceData[]) {
   const chartRef = ref<HTMLElement>();
   let instance: echarts.ECharts | null = null;
 
-  function initChart() {
+  function init() {
     if (!chartRef.value) return;
     instance = echarts.init(chartRef.value);
-    updateChart();
+    update();
     window.addEventListener('resize', () => instance?.resize());
   }
 
-  function updateChart() {
+  function update() {
     if (!instance) return;
     const d = data();
+    const pieData = d.map(v => ({ name: 'channel' in v ? v.channel : v.type, value: v.value }));
+
     instance.setOption({
-      tooltip: { trigger: 'item', backgroundColor: 'rgba(6,30,60,0.9)', borderColor: '#00d4ff', textStyle: { color: '#e0e6f0' },
-        formatter: '{b}: {c} ({d}%)' },
-      legend: { orient: 'vertical', right: 5, top: 'center', textStyle: { color: '#e0e6f0', fontSize: 11 } },
+      tooltip: { trigger: 'item', backgroundColor: 'rgba(10,22,40,0.92)', borderColor: 'rgba(0,180,216,0.3)', textStyle: { color: '#d0d8e8', fontSize: 12 }, formatter: '{b}: {c} ({d}%)' },
       series: [{
-        type: 'pie', radius: ['50%', '75%'], center: ['40%', '50%'],
+        type: 'pie', radius: ['55%', '78%'], center: ['50%', '52%'],
         avoidLabelOverlap: false,
         label: { show: false },
-        emphasis: { label: { show: true, fontSize: 16, fontWeight: 'bold' } },
-        data: d.map(v => ({ name: v.channel, value: v.value })),
-        itemStyle: { borderRadius: 4, borderColor: '#0a1a2e', borderWidth: 3 },
-        animationDuration: 1000
+        emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold', color: '#e0e8f8' }, scaleSize: 8 },
+        data: pieData,
+        itemStyle: { borderRadius: 4, borderColor: '#0a1628', borderWidth: 3 },
+        animationDuration: 1200, animationEasing: 'cubicOut',
       }],
-      color: ['#00d4ff', '#4de8ff', '#00ff88', '#ffb800', '#ff6b9d', '#c084fc']
+      color: ['#00b4d8', '#48cae4', '#90e0ef', '#c9a96e', '#7ec8a0', '#6c8cd9', '#a08cd9'],
     });
   }
 
-  onMounted(initChart);
+  onMounted(init);
   onUnmounted(() => { instance?.dispose(); });
-  watch(data, updateChart, { deep: true });
+  watch(data, update, { deep: true });
   return { chartRef };
 }

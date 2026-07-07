@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
+﻿import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { DashboardData, SalesData, TrafficData, DistributionData, EfficiencyData } from '@/types/dashboard';
+import type { DashboardData, SalesData, TrafficData, EfficiencyData, DeviceData, RegionData, YoYData, AlertData } from '@/types/dashboard';
 import { fetchDashboardData } from '@/services/dashboard';
 import { createLogger } from '@/services/logger';
 
@@ -15,13 +15,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     loading.value = true;
     error.value = null;
     try {
-      logger.info('Loading dashboard data...');
       data.value = await fetchDashboardData();
       logger.info('Dashboard data loaded');
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      error.value = msg;
-      logger.error('Dashboard load failed', msg);
+      error.value = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Dashboard load failed', error.value);
     } finally {
       loading.value = false;
     }
@@ -29,8 +27,18 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   const salesData = computed<SalesData[]>(() => data.value?.sales ?? []);
   const trafficData = computed<TrafficData[]>(() => data.value?.traffic ?? []);
-  const distributionData = computed<DistributionData[]>(() => data.value?.distribution ?? []);
   const efficiencyData = computed<EfficiencyData[]>(() => data.value?.efficiency ?? []);
+  const devicesData = computed<DeviceData[]>(() => data.value?.devices ?? []);
+  const regionsData = computed<RegionData[]>(() => data.value?.regions ?? []);
+  const yoyData = computed<YoYData[]>(() => data.value?.yoy ?? []);
+  const alertsData = computed<AlertData[]>(() => data.value?.alerts ?? []);
 
-  return { data, loading, error, fetchDashboard, salesData, trafficData, distributionData, efficiencyData };
+  const totalRevenue = computed(() => salesData.value.reduce((s, v) => s + v.revenue, 0));
+
+  return {
+    data, loading, error, fetchDashboard,
+    salesData, trafficData, efficiencyData,
+    devicesData, regionsData, yoyData, alertsData,
+    totalRevenue,
+  };
 });

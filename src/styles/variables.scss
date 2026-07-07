@@ -1,37 +1,104 @@
+// === 设计基准 ===
 $design-width: 1920;
 $design-height: 1080;
-$color-primary: #00d4ff;
-$color-primary-light: #4de8ff;
-$color-primary-dark: #0099cc;
-$color-accent: #00ff88;
-$color-warning: #ffb800;
-$color-danger: #ff4d4f;
-$bg-dark: #0a1a2e;
-$bg-panel: rgba(6, 30, 60, 0.8);
-$bg-panel-hover: rgba(6, 30, 60, 0.95);
-$bg-card: rgba(0, 212, 255, 0.05);
-$border-color: rgba(0, 212, 255, 0.3);
-$border-glow: 0 0 10px rgba(0, 212, 255, 0.3);
-$border-radius: 4px;
+
+// === 背景层次 — 国风科技蓝 ===
+$bg-deep: #070e1a;
+$bg-dark: #0a1628;
+$bg-mid: #0d1f3c;
+$bg-light: #112240;
+
+// === 高亮色 — 青蓝体系 ===
+$color-primary: #00b4d8;
+$color-secondary: #48cae4;
+$color-tertiary: #90e0ef;
+
+// === 点缀色 — 国风 ===
+$color-gold: #c9a96e;
+$color-jade: #7ec8a0;
+
+// === 功能色 ===
+$color-warning: #f0a040;
+$color-danger: #e05050;
+$color-success: #50c878;
+
+// === HUD 玻璃面板 ===
+$glass-bg: rgba(13,31,60,0.55);
+$glass-bg-hover: rgba(13,31,60,0.75);
+$glass-bg-light: rgba(17,34,64,0.4);
+$glass-border: rgba(0,180,216,0.2);
+$glass-border-hover: rgba(0,180,216,0.45);
+$glass-blur: 8px;
+$glass-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+
+// === 发光效果 ===
+$glow-sm: 0 0 8px rgba(0,180,216,0.2);
+$glow-md: 0 0 16px rgba(0,180,216,0.3);
+$glow-lg: 0 0 32px rgba(0,180,216,0.4);
+$glow-text: 0 0 12px rgba(0,180,216,0.5);
+
+// === 字体 ===
 $font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+$font-mono: 'JetBrains Mono', 'Consolas', monospace;
+$font-size-xs: 11px;
+$font-size-sm: 13px;
+$font-size-base: 15px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+$font-size-xxl: 30px;
+
+// === 间距 ===
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 20px;
+$spacing-xl: 28px;
+$radius-sm: 2px;
+$radius-md: 4px;
+$radius-lg: 8px;
+
+// === 动画 ===
+$transition-fast: 0.15s ease;
 $transition-normal: 0.3s ease;
+$transition-slow: 0.6s cubic-bezier(0.4,0,0.2,1);
+
+// === Mixins ===
+@mixin glass-panel {
+  background: $glass-bg;
+  backdrop-filter: blur($glass-blur);
+  -webkit-backdrop-filter: blur($glass-blur);
+  border: 1px solid $glass-border;
+  border-radius: $radius-md;
+  box-shadow: $glass-shadow;
+}
 
 @mixin panel-title {
-  font-size: 20px;
+  font-size: $font-size-lg;
   font-weight: 600;
   color: $color-primary;
   letter-spacing: 2px;
-  padding: 8px 16px;
+  padding: $spacing-sm $spacing-md;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
   &::before {
     content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 16px;
-    background: linear-gradient(180deg, $color-primary, $color-primary-dark);
-    border-radius: 2px;
+    width: 3px; height: 16px;
+    background: linear-gradient(180deg, $color-primary, transparent);
+    border-radius: 2px; flex-shrink: 0;
   }
+  &::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba($color-primary,0.4), transparent);
+    margin-left: $spacing-sm;
+  }
+}
+
+@mixin text-glow { text-shadow: 0 0 12px rgba(0,180,216,0.4); }
+
+@mixin scrollbar {
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: rgba(0,180,216,0.2); border-radius: 2px; }
 }

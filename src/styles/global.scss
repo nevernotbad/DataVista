@@ -1,1 +1,23 @@
-@use 'reset'; @use 'variables' as *; html, body { font-family: $font-family; font-size: 16px; color: #e0e6f0; background: $bg-dark; -webkit-font-smoothing: antialiased; } #app { width: 100vw; height: 100vh; overflow: hidden; } ::-webkit-scrollbar { width: 4px; height: 4px; } ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.3); border-radius: 2px; }
+@use "reset" as *;
+
+html, body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: #d0d8e8;
+  background: $bg-deep;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,180,216,0.2); border-radius: 2px; }
+
+.text-glow { @include text-glow; }
+.text-gold { color: $color-gold; }
+.text-jade { color: $color-jade; }

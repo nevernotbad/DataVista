@@ -1,0 +1,1 @@
+﻿[{"id":1,"level":"warning","message":"华东区服务器负载超过80%","time":"14:32:15"},{"id":2,"level":"danger","message":"数据库连接池使用率达95%","time":"14:28:40"},{"id":3,"level":"info","message":"系统版本已更新至 v2.4.1","time":"14:15:00"},{"id":4,"level":"warning","message":"CDN节点深圳区域延迟升高","time":"14:10:22"},{"id":5,"level":"info","message":"定时备份任务完成","time":"13:00:00"}]
