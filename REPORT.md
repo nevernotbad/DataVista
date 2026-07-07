@@ -1,4 +1,4 @@
-﻿# DataVista（数据视界）项目开发总结报告
+# DataVista（数据视界）项目开发总结报告
 
 > 报告日期：2026-07-07 | 仓库：https://github.com/nevernotbad/DataVista
 
@@ -17,6 +17,40 @@
 
 ---
 
+
+---
+
+## 附：Git/GitHub 配置信息
+
+| 配置项 | 值 |
+|--------|-----|
+| GitHub 账号 | **nevernotbad** |
+| Git 用户名 | nevernotbad |
+| Git 邮箱 | 2465431819@qq.com |
+| 仓库地址 | https://github.com/nevernotbad/DataVista |
+| SSH 地址 | git@github.com:nevernotbad/DataVista.git |
+| 默认分支 | master |
+| 开源协议 | MIT License |
+
+### 初始化过程
+
+1. 使用 SSH 方式克隆/推送（`git@github.com`），解决了 HTTPS 代理 127.0.0.1:7890 不可达问题
+2. 通过 GitHub Personal Access Token（`ghp_xxx`）调用 API 创建公开仓库
+3. `git remote add origin git@github.com:nevernotbad/DataVista.git`
+4. 首次推送：`git push -u origin master`
+5. 后续提交均使用 `git commit -m "..."` + `git push`
+
+### 本地工作目录
+
+```
+C:\Users\a\Documents\Codex\2026-07-07\ban\DataVista\
+```
+
+### Token 安全提醒
+
+仓库创建所用的 GitHub Personal Access Token 已在命令行中使用，**不建议**将其写入任何文档或提交到仓库。如需重新创建仓库或管理 GitHub 资源，请在 [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens) 生成新 Token。
+
+---
 ## 二、开发历程（9次提交）
 
 | 提交 | 说明 |
