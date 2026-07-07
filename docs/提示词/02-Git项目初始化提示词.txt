@@ -1,0 +1,19 @@
+﻿你是数据大屏开发专家。项目英文名为 DataVista，中文名为 数据视界。请帮我完成项目初始化：使用 Git 初始化本地仓库，创建 GitHub 公开仓库进行托管，项目定位为个人从 0 到 1 学习数据可视化大屏开发的实践开源项目。请生成规范的 README.md 项目说明文档，开源协议采用 MIT 协议，其余功能与文件后续逐步迭代补充。
+
+README.md 需包含以下内容：
+- 项目名称中英文 + 徽章
+- 项目简介
+- 特性列表
+- 技术栈规划（Vue 3 + TypeScript + Vite + ECharts）
+- 快速开始
+- 项目目录结构
+- 开发路线图
+- 开源协议说明
+- 作者信息
+
+Git 配置信息：
+- 用户名：nevernotbad
+- 邮箱：2465431819@qq.com
+- GitHub 账号：nevernotbad
+- 仓库名：DataVista
+- SSH 地址：git@github.com:nevernotbad/DataVista.git

@@ -1,0 +1,131 @@
+﻿你是数据大屏与前端工程化专家。项目英文名为 DataVista，中文名为数据视界，这是一个个人从 0 到 1 实践的开源数据可视化大屏学习项目。
+
+请基于 Vue 3 渐进式技术架构方案，按以下步骤分步执行，完成项目脚手架搭建、核心代码编写、Mock 数据接入，最终自动启动开发服务并打开浏览器，展示一个完整美观的数据可视化大屏页面。
+
+## 技术栈
+- 框架：Vue 3 (Composition API) + TypeScript + Vite
+- 状态管理：Pinia
+- 图表引擎：ECharts 5 + vue-echarts
+- 数据层：Repository Pattern（IDataSource 接口，Mock/Api 双适配器）
+- Mock：MSW (Mock Service Worker)
+- 样式：SCSS + CSS Variables（深蓝科技风主题，基准 1920x1080）
+- 测试：Vitest + Playwright
+- 日志：自建 Logger 服务（debug/info/warn/error 分级）
+- 代码规范：ESLint + Prettier + Stylelint + Husky + Commitlint
+
+## 核心约束
+1. 严禁所有代码耦合在单一文件中，每个文件职责单一
+2. 数据层采用 Repository Pattern，定义 IDataSource 接口
+3. 每个模块完成后立即验证
+4. 所有文案使用中文
+
+## 目标目录结构
+src/
+├── adapters/           # IDataSource.ts + MockDataSource.ts + ApiDataSource.ts
+├── charts/             # BarChart/ LineChart/ PieChart/ GaugeChart/（每个含 .vue + useXxx.ts）
+├── components/         # BorderBox/ Decoration/ DigitalScroll/ Loading/ PageHeader/
+├── composables/        # useAutoResize.ts / useCarousel.ts / useTheme.ts
+├── layouts/            # DashboardLayout.vue（CSS Grid 12列布局）
+├── mocks/              # browser.ts + handlers.ts + data/*.json（4组Mock数据）
+├── services/           # dashboard.ts + logger/（Logger.ts + index.ts）
+├── stores/             # dashboard.ts + theme.ts（Pinia）
+├── styles/             # variables.scss + reset.scss + global.scss
+├── types/              # dashboard.ts + global.d.ts
+├── views/              # Dashboard.vue
+├── App.vue
+└── main.ts
+
+## 执行步骤（严格按顺序）
+
+### 第 1 步：脚手架搭建
+- npm create vite@latest . -- --template vue-ts
+- 安装全部依赖（生产 + 开发）
+- 配置 vite.config.ts（别名 @、SCSS additionalData 注入）
+- 配置 tsconfig.json（严格模式、路径别名）
+- npm run dev 确认启动
+- 删除默认示例文件
+
+### 第 2 步：工程化规范体系
+- .eslintrc.cjs（TS + Vue 3 规则）
+- .prettierrc.json（统一格式）
+- .stylelintrc.json（SCSS 规则）
+- package.json scripts：lint / format / lint:style / type-check / test / test:e2e
+- Husky：pre-commit（lint-staged）+ commit-msg（commitlint）
+- commitlint.config.cjs（conventional 规范）
+
+### 第 3 步：类型定义与样式基础
+- src/types/dashboard.ts：SalesData / TrafficData / DistributionData / EfficiencyData / DashboardData
+- src/types/global.d.ts：.vue 模块声明
+- src/styles/variables.scss：科技蓝 #00d4ff、深色背景 #0a1a2e、面板 rgba(6,30,60,0.8)、CSS 变量
+- src/styles/reset.scss + global.scss（深色背景、滚动条样式）
+- vite.config.ts 配置 SCSS additionalData 自动注入
+
+### 第 4 步：Logger 日志服务
+- src/services/logger/Logger.ts：级别枚举 + 格式化输出 + 预留 remote()
+- src/services/logger/index.ts：createLogger(module) 工厂函数
+
+### 第 5 步：数据层 Repository Pattern
+- src/adapters/IDataSource.ts：IDataSource<T> 接口
+- src/adapters/MockDataSource.ts：通过 axios 请求 MSW 拦截端点
+- src/adapters/ApiDataSource.ts：真实 API 实现（含错误处理和重试骨架）
+
+### 第 6 步：MSW Mock 配置
+- src/mocks/data/ 下 4 个 JSON（各至少 6 条数据）：sales / traffic / distribution / efficiency
+- src/mocks/handlers.ts：注册 GET /api/dashboard，返回完整 DashboardData
+- src/mocks/browser.ts：标准 MSW browser 初始化
+- npx msw init public/
+
+### 第 7 步：Pinia Store
+- src/stores/dashboard.ts：data/loading/error/dataSource 状态 + fetchDashboard() + 图表数据 getters
+- src/stores/theme.ts：isDark 状态 + toggleTheme()
+
+### 第 8 步：Composables
+- useAutoResize.ts：计算缩放比例，CSS transform:scale() 等比缩放
+- useCarousel.ts：自动轮播 + 悬停暂停
+- useTheme.ts：绑定 theme Store，设置 data-theme 属性
+
+### 第 9 步：ECharts 图表组件封装
+每个图表（BarChart/LineChart/PieChart/GaugeChart）：
+- .vue 渲染容器 + props 接口
+- useXxx.ts composable 管理 ECharts 实例、配置、resize、销毁
+- 深色主题配色（#00d4ff 系）
+- 入场动画 animationDuration: 1000
+- 响应 window resize
+
+### 第 10 步：装饰与布局组件
+- BorderBox：发光边框容器 + title prop + slot
+- Decoration：SVG/CSS 装饰线
+- DigitalScroll：requestAnimationFrame 数字滚动
+- Loading：科技感旋转圆环
+- PageHeader：项目名 + 实时时钟 + 主题切换
+
+### 第 11 步：布局与主页面
+- DashboardLayout.vue：CSS Grid 12列，等比缩放
+  - 顶部：PageHeader（全宽）
+  - 左列(3列)：PieChart + GaugeChart
+  - 中列(6列)：LineChart + BarChart
+  - 右列(3列)：DigitalScroll + 装饰区
+- Dashboard.vue：组装布局，onMounted 调用 fetchDashboard()，loading/error 状态处理
+
+### 第 12 步：入口装配
+- main.ts：注册 Vue/Pinia/Router，DEV 环境启动 MSW，导入全局样式
+- App.vue：<RouterView />，#app 全屏 overflow:hidden
+- index.html：标题"数据视界 - DataVista"
+
+### 第 13 步：验证与启动
+- npm run type-check（零类型错误）
+- npm run lint（零 ESLint 错误）
+- npm run format（统一格式化）
+- npm run dev（确认 MSW 拦截生效、图表动画、缩放正常）
+
+### 第 14 步：Git 提交
+- git add -A
+- git commit -m "feat: scaffold DataVista dashboard with Vue 3 + ECharts + MSW"
+- git push
+
+## 验收标准
+- 全屏深蓝科技风背景 + 网格线
+- 顶部标题栏：数据视界 / DataVista + 实时时钟
+- 4 个图表（环形饼图/仪表盘/折线图/柱状图）均有数据、动画、深色配色
+- 数字滚动面板 + 发光边框
+- 缩放浏览器窗口等比不变形
