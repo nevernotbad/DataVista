@@ -16,10 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
+
 const props = defineProps<{ label: string; value: number; unit?: string; icon?: string; change?: number; duration?: number }>();
 const displayValue = ref(0);
-const dur = props.duration ?? 1200;
+const dur = props.duration ?? 1500;
 
 function animate() {
   const start = performance.now();
@@ -42,8 +43,6 @@ const trendClass = computed(() => {
   if (props.change === undefined) return '';
   return props.change >= 0 ? 'trend-up' : 'trend-down';
 });
-
-import { computed } from 'vue';
 </script>
 
 <style scoped lang="scss">
@@ -54,15 +53,24 @@ import { computed } from 'vue';
   border-radius: $radius-md;
   border: 1px solid rgba(0,180,216,0.08);
   transition: all $transition-normal;
-  &:hover { border-color: $glass-border; background: $glass-bg; }
+  &:hover { border-color: $glass-border; background: $glass-bg; box-shadow: $glow-sm; }
 }
 .stat-icon { font-size: 24px; flex-shrink: 0; }
 .stat-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .stat-label { font-size: $font-size-xs; color: rgba(208,216,232,0.5); }
 .stat-value { display: flex; align-items: baseline; gap: 4px; }
-.stat-number { font-size: $font-size-xl; font-weight: 700; font-family: $font-mono; color: $color-primary; @include text-glow; }
+.stat-number {
+  font-size: $font-size-xl; font-weight: 700; font-family: $font-mono;
+  color: $color-primary; @include text-glow;
+  &::after {
+    // pulse dot for active indicators
+  }
+}
 .stat-unit { font-size: $font-size-sm; color: rgba(0,180,216,0.5); }
-.stat-change { font-size: $font-size-xs; color: $color-jade; &.trend-down { color: $color-danger; } }
-.trend-up .stat-number { color: $color-jade; }
-.trend-down .stat-number { color: $color-danger; }
+.stat-change { font-size: $font-size-xs;
+  .change-arrow { margin-right: 2px; }
+  .trend-up & { color: $color-jade; }
+}
+.trend-up .stat-number { color: $color-jade; text-shadow: 0 0 12px rgba(126,200,160,0.4); }
+.trend-down .stat-number { color: $color-danger; text-shadow: 0 0 12px rgba(224,80,80,0.4); }
 </style>

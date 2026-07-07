@@ -1,18 +1,10 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue';
-
-interface ResizeResult {
-  scaleX: Ref<number>;
-  scaleY: Ref<number>;
-  scale: Ref<number>;
-}
+﻿import { ref, onMounted, onUnmounted, type Ref } from 'vue';
 
 export function useAutoResize(
   wrapperRef: Ref<HTMLElement | undefined>,
   designWidth = 1920,
   designHeight = 1080,
-): ResizeResult {
-  const scaleX = ref(1);
-  const scaleY = ref(1);
+) {
   const scale = ref(1);
 
   function calcScale() {
@@ -20,15 +12,25 @@ export function useAutoResize(
     if (!el) return;
     const ww = window.innerWidth;
     const wh = window.innerHeight;
-    scaleX.value = ww / designWidth;
-    scaleY.value = wh / designHeight;
-    scale.value = Math.min(scaleX.value, scaleY.value);
-    el.style.transform = `scale(${scale.value})`;
+    const s = Math.min(ww / designWidth, wh / designHeight);
+    scale.value = s;
+    el.style.width = `${designWidth}px`;
+    el.style.height = `${designHeight}px`;
+    el.style.transform = `scale(${s})`;
     el.style.transformOrigin = 'left top';
+    el.style.position = 'absolute';
+    el.style.left = `${(ww - designWidth * s) / 2}px`;
+    el.style.top = `${(wh - designHeight * s) / 2}px`;
   }
 
-  onMounted(() => { calcScale(); window.addEventListener('resize', calcScale); });
-  onUnmounted(() => { window.removeEventListener('resize', calcScale); });
+  onMounted(() => {
+    calcScale();
+    window.addEventListener('resize', calcScale);
+  });
 
-  return { scaleX, scaleY, scale };
+  onUnmounted(() => {
+    window.removeEventListener('resize', calcScale);
+  });
+
+  return { scale };
 }
