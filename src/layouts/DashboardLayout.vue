@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="dashboard-wrapper" ref="wrapperRef">
     <!-- 背景装饰层 -->
     <div class="bg-layer">
@@ -200,7 +200,7 @@ const quickStats = [
 }
 
 // HEADER
-.grid-header { grid-column: 1 / -1; grid-row: 1; }
+.grid-header { grid-column: 1 / -1; grid-row: 1; z-index: 10; overflow: visible; }
 
 // LEFT (3 cols)
 .grid-left-top    { grid-column: 1 / 4; grid-row: 2; }

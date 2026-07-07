@@ -24,23 +24,23 @@
     <div class="header-right">
       <!-- Theme switcher -->
       <div class="theme-dropdown">
-        <button class="header-btn theme-btn" @click="showThemes = !showThemes" title="切换主题">
+        <button ref="themeBtnRef" class="header-btn theme-btn" @click="toggleThemes" title="切换主题">
           <span class="theme-icon">{{ currentTheme.icon }}</span>
           <span class="theme-label">{{ currentTheme.label }}</span>
         </button>
-        <div class="theme-menu" v-if="showThemes" @mouseleave="showThemes = false">
-          <button
-            v-for="t in themeList"
-            :key="t.name"
-            class="theme-option"
-            :class="{ active: t.name === activeTheme }"
-            @click="selectTheme(t.name)"
-          >
-            <span class="tm-icon">{{ t.icon }}</span>
-            <span class="tm-label">{{ t.label }}</span>
-            <span class="tm-check" v-if="t.name === activeTheme">✓</span>
-          </button>
-        </div>
+        <Teleport to="body">
+          <div v-if="showThemes" class="theme-menu" :style="menuStyle" @mouseleave="showThemes = false">
+            <button
+              v-for="t in themeList" :key="t.name"
+              class="theme-option" :class="{ active: t.name === activeTheme }"
+              @click="selectTheme(t.name)"
+            >
+              <span class="tm-icon">{{ t.icon }}</span>
+              <span class="tm-label">{{ t.label }}</span>
+              <span class="tm-check" v-if="t.name === activeTheme">✓</span>
+            </button>
+          </div>
+        </Teleport>
       </div>
 
       <button class="header-btn" @click="toggleFullscreen" title="全屏">
@@ -63,6 +63,20 @@ const { switchTo, getCurrent, getCurrentTheme } = useThemeSwitch();
 const activeTheme = ref<ThemeId>(getCurrent());
 const currentTheme = ref(getCurrentTheme());
 const showThemes = ref(false);
+const themeBtnRef = ref<HTMLElement>();
+const menuStyle = ref<Record<string, string>>({});
+
+function toggleThemes() {
+  if (!showThemes.value && themeBtnRef.value) {
+    const rect = themeBtnRef.value.getBoundingClientRect();
+    menuStyle.value = {
+      position: 'fixed',
+      top: (rect.bottom + 4) + 'px',
+      right: (window.innerWidth - rect.right) + 'px',
+    };
+  }
+  showThemes.value = !showThemes.value;
+}
 
 function selectTheme(id: ThemeId) {
   switchTo(id);
@@ -143,20 +157,29 @@ onUnmounted(() => clearInterval(timer));
 }
 .theme-dropdown { position: relative; }
 .theme-btn { gap: 6px; .theme-icon { font-size: 13px; } .theme-label { font-size: 11px; } }
+
+// theme-menu styles are NOT scoped since it's teleported to body
+</style>
+
+<!-- Non-scoped styles for teleported menu -->
+<style lang="scss">
 .theme-menu {
-  position: absolute; top: calc(100% + 4px); right: 0;
-  background: $bg-mid; border: 1px solid $glass-border; border-radius: $radius-md;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 100; overflow: hidden; min-width: 160px;
+  background: var(--bg-mid, #0d1f3c);
+  border: 1px solid var(--glass-border, rgba(0,180,216,0.2));
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  overflow: hidden;
+  min-width: 170px;
+  z-index: 9999;
 }
 .theme-option {
   display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 14px;
-  border: none; background: transparent; color: $text-secondary; cursor: pointer;
-  font-size: 13px; transition: all $transition-fast;
-  &:hover { background: $glass-bg-light; color: $text-primary; }
-  &.active { color: $color-primary; background: rgba(var(--color-primary-rgb, 0,180,216), 0.08); }
+  border: none; background: transparent; color: var(--text-secondary, rgba(208,216,232,0.7));
+  cursor: pointer; font-size: 13px; transition: all 0.15s ease;
+  &:hover { background: var(--glass-bg-light, rgba(17,34,64,0.4)); color: var(--text-primary, #d0d8e8); }
+  &.active { color: var(--color-primary, #00b4d8); background: rgba(var(--color-primary-rgb, 0,180,216), 0.08); }
   .tm-icon { font-size: 14px; }
   .tm-label { flex: 1; text-align: left; }
   .tm-check { font-size: 12px; }
 }
-@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 </style>
